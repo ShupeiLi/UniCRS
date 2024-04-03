@@ -17,7 +17,7 @@ def load_kg(file):
 
 
 if __name__ == '__main__':
-    kg = load_kg('mappingbased-objects_lang=en_202112.ttl')
+    kg = load_kg('mappingbased-objects_lang=en.ttl')
     with open('kg.pkl', 'wb') as f:
         pkl.dump(kg, f)
 
