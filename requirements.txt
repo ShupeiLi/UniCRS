@@ -1,3 +1,6 @@
 transformers
 pyg
 accelerate
+wandb
+loguru
+torch_geometric

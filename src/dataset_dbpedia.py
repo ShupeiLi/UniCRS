@@ -9,7 +9,7 @@ class DBpedia:
     def __init__(self, dataset, debug=False):
         self.debug = debug
 
-        self.dataset_dir = os.path.join('data', dataset)
+        self.dataset_dir = os.path.join('src/data', dataset)
         with open(os.path.join(self.dataset_dir, 'dbpedia_subkg.json'), 'r', encoding='utf-8') as f:
             self.entity_kg = json.load(f)
         with open(os.path.join(self.dataset_dir, 'entity2id.json'), 'r', encoding='utf-8') as f:
