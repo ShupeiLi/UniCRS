@@ -26,7 +26,7 @@ from model_prompt import KGPrompt
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=42, help="A seed for reproducible training.")
-    parser.add_argument("--output_dir", type=str, default='save', help="Where to store the final model.") # set save path
+    parser.add_argument("--output_dir", type=str, default='pre-save', help="Where to store the final model.") # set save path
     parser.add_argument("--debug", action='store_true', help="Debug mode.")
     # data
     parser.add_argument("--dataset", type=str, help="A file containing all data.", default="redial") # NOTE: [redial, inspired]

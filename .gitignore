@@ -4,6 +4,11 @@
 
 mappingbased-objects_lang=en.ttl
 *.pkl
+save
+pre-save
+conv-save
+log-backup
+log
 
 # IntelliJ project files
 .idea

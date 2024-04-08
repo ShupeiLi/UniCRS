@@ -4,3 +4,4 @@ accelerate
 wandb
 loguru
 torch_geometric
+nltk
