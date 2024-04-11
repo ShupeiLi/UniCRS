@@ -28,7 +28,7 @@ def parse_args():
     parser.add_argument("--debug", action='store_true', help="Debug mode.")
     # data
     parser.add_argument("--dataset", type=str, help="A file containing all data.", default="redial") # NOTE: [redial, inspired]
-    parser.add_argument("--split", type=str, default="train") # NOTE: [train, valid, test] run all of the three options
+    parser.add_argument("--split", type=str, default="test") # NOTE: [train, valid, test] run all of the three options
     parser.add_argument('--num_workers', type=int, default=0)
     parser.add_argument('--context_max_length', type=int, help="max length of both encoder and decoder input.", default=200)
     parser.add_argument('--resp_max_length', type=int, help="max length of decoder input.", default=183)

@@ -5,7 +5,7 @@ parser = ArgumentParser()
 parser.add_argument("--gen_file_prefix", type=str, required=True)
 args = parser.parse_args()
 gen_file_prefix = args.gen_file_prefix
-dataset = 'inspired'
+dataset = 'redial'
 
 for split in ['train', 'valid', 'test']:
     raw_file_path = f"../{dataset}/{split}_data_processed.jsonl"
@@ -13,7 +13,7 @@ for split in ['train', 'valid', 'test']:
     raw_data = raw_file.readlines()
     # print(len(raw_data))
 
-    gen_file_path = f"../../save/{dataset}/{gen_file_prefix}_{split}.jsonl"
+    gen_file_path = f"../../../save/{dataset}/{gen_file_prefix}_{split}.jsonl"
     gen_file = open(gen_file_path, encoding='utf-8')
     gen_data = gen_file.readlines()
 

@@ -9,6 +9,9 @@ pre-save
 conv-save
 log-backup
 log
+*.jsonl
+*.json
+rec-save
 
 # IntelliJ project files
 .idea

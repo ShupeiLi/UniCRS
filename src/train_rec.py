@@ -26,43 +26,43 @@ from model_prompt import KGPrompt
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=42, help="A seed for reproducible training.")
-    parser.add_argument("--output_dir", type=str, default='save', help="Where to store the final model.")
+    parser.add_argument("--output_dir", type=str, default='rec-save', help="Where to store the final model.")
     parser.add_argument("--debug", action='store_true', help="Debug mode.")
     # data
-    parser.add_argument("--dataset", type=str, required=True, help="A file containing all data.")
+    parser.add_argument("--dataset", type=str, help="A file containing all data.", default="redial_gen") # NOTE: [redial_gen, inspired_gen]
     parser.add_argument("--shot", type=float, default=1)
     parser.add_argument("--use_resp", action="store_true")
-    parser.add_argument("--context_max_length", type=int, help="max input length in dataset.")
-    parser.add_argument("--prompt_max_length", type=int)
-    parser.add_argument("--entity_max_length", type=int, help="max entity length in dataset.")
+    parser.add_argument("--context_max_length", type=int, help="max input length in dataset.", default=200)
+    parser.add_argument("--prompt_max_length", type=int, default=200)
+    parser.add_argument("--entity_max_length", type=int, help="max entity length in dataset.", default=32)
     parser.add_argument('--num_workers', type=int, default=0)
-    parser.add_argument("--tokenizer", type=str)
-    parser.add_argument("--text_tokenizer", type=str)
+    parser.add_argument("--tokenizer", type=str, default="microsoft/DialoGPT-small")
+    parser.add_argument("--text_tokenizer", type=str, default="roberta-base")
     # model
-    parser.add_argument("--model", type=str, required=True,
+    parser.add_argument("--model", type=str, default="microsoft/DialoGPT-small",
                         help="Path to pretrained model or model identifier from huggingface.co/models.")
-    parser.add_argument("--text_encoder", type=str)
+    parser.add_argument("--text_encoder", type=str, default="roberta-base")
     parser.add_argument("--num_bases", type=int, default=8, help="num_bases in RGCN.")
-    parser.add_argument("--n_prefix_rec", type=int)
-    parser.add_argument("--prompt_encoder", type=str)
+    parser.add_argument("--n_prefix_rec", type=int, default=10)
+    parser.add_argument("--prompt_encoder", type=str, default="pre-save/best")
     # optim
-    parser.add_argument("--num_train_epochs", type=int, default=10, help="Total number of training epochs to perform.")
+    parser.add_argument("--num_train_epochs", type=int, default=5, help="Total number of training epochs to perform.")
     parser.add_argument("--max_train_steps", type=int, default=None,
                         help="Total number of training steps to perform. If provided, overrides num_train_epochs.")
-    parser.add_argument("--per_device_train_batch_size", type=int, default=4,
+    parser.add_argument("--per_device_train_batch_size", type=int, default=64,
                         help="Batch size (per device) for the training dataloader.")
-    parser.add_argument("--per_device_eval_batch_size", type=int, default=4,
+    parser.add_argument("--per_device_eval_batch_size", type=int, default=64,
                         help="Batch size (per device) for the evaluation dataloader.")
     parser.add_argument("--gradient_accumulation_steps", type=int, default=1,
                         help="Number of updates steps to accumulate before performing a backward/update pass.")
-    parser.add_argument("--learning_rate", type=float, default=1e-5,
+    parser.add_argument("--learning_rate", type=float, default=1e-4,
                         help="Initial learning rate (after the potential warmup period) to use.")
     parser.add_argument("--weight_decay", type=float, default=0.01, help="Weight decay to use.")
     parser.add_argument('--max_grad_norm', type=float)
-    parser.add_argument('--num_warmup_steps', type=int)
-    parser.add_argument('--fp16', action='store_true')
+    parser.add_argument('--num_warmup_steps', type=int, default=530) # NOTE: 33 for inspired_gen
+    parser.add_argument("--mixed_precision", type=str, default="fp16")
     # wandb
-    parser.add_argument("--use_wandb", action="store_true", help="whether to use wandb")
+    parser.add_argument("--use_wandb", action="store_true", help="whether to use wandb", default=False)
     parser.add_argument("--entity", type=str, help="wandb username")
     parser.add_argument("--project", type=str, help="wandb exp project")
     parser.add_argument("--name", type=str, help="wandb exp name")
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     config = vars(args)
 
     # Initialize the accelerator. We will let the accelerator handle device placement for us.
-    accelerator = Accelerator(device_placement=False, fp16=args.fp16)
+    accelerator = Accelerator(device_placement=False, mixed_precision=args.mixed_precision)
     device = accelerator.device
 
     # Make one log on every process with the configuration for debugging.
