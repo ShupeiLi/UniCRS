@@ -1,6 +1,12 @@
 from typing import List, Union, Optional
 
+import re
 import torch
+
+
+re_art = re.compile(r'\b(a|an|the)\b')
+re_punc = re.compile(r'[!"#$%&()*+,-./:;<=>?@\[\]\\^`{|}~_\']')
+re_space = re.compile(r'\s+')
 
 
 def padded_tensor(
@@ -57,3 +63,15 @@ def padded_tensor(
             output[i, t - length:] = item
 
     return output
+
+
+def normalize_answer(s):
+    """
+    Lower text and remove punctuation, articles and extra whitespace.
+    """
+    s = s.lower()
+    s = re_punc.sub(' ', s)
+    s = re_art.sub(' ', s)
+    s = re_space.sub(' ', s)
+    s = ' '.join(s.split())
+    return s
