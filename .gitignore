@@ -5,7 +5,7 @@
 mappingbased-objects_lang=en.ttl
 *.pkl
 save
-pre-save
+prompt-save
 conv-save
 log-backup
 log

@@ -31,7 +31,6 @@ class ConvEvaluator:
         decoded_labels = [decoded_label.replace('<pad>', '').replace('<|endoftext|>', '') for decoded_label in
                           decoded_labels]
         decoded_labels = [normalize_answer(label.strip()) for label in decoded_labels]
-        # TODO: check the content of decoded_preds and decoded_labels
 
         if log and hasattr(self, 'log_file'):
             for pred, label in zip(decoded_preds, decoded_labels):
@@ -73,9 +72,9 @@ class ConvEvaluator:
     def compute_bleu(self, preds, labels):
         for pred, label in zip(preds, labels):
             pred, label = pred.split(), [label.split()]
-            for k in range(4):
+            for k in range(1, 5):
                 weights = [1 / k for _ in range(k)] # Correct weights
-                self.metric[f'bleu@{k + 1}'] += sentence_bleu(
+                self.metric[f'bleu@{k}'] += sentence_bleu(
                     label,
                     pred,
                     smoothing_function=nltkbleu.SmoothingFunction(epsilon=1e-12).method1,
@@ -91,8 +90,7 @@ class ConvEvaluator:
 
     def compute_rouge(self, preds, labels):
         for pred, label in zip(preds, labels):
-            pred = pred.split()
-            label = [label.split()]
+            label = [label]
             result = self._rouge(pred, label)
             self.metric['rouge@1'] += result[0]
             self.metric['rouge@2'] += result[1]
@@ -103,11 +101,7 @@ class ConvEvaluator:
         evaluator = rouge.Rouge(
                     metrics=['rouge-n', 'rouge-l'], max_n=2
                 )
-        try:
-            score = evaluator.get_scores(guess, answers)
-        except LookupError:
-            return [None, None, None]
-
+        score = evaluator.get_scores(guess, answers)
         return [score['rouge-1'][measure], score['rouge-2'][measure], score['rouge-l'][measure]]
 
     def report(self):
@@ -115,7 +109,7 @@ class ConvEvaluator:
         for k, v in self.metric.items():
             if self.sent_cnt == 0:
                 report[k] = 0
-            elif 'rouge' or 'intra-dist' in k:
+            elif ('rouge' in k) or ('intra-dist' in k):
                 report[k] = v / self.sent_cnt
             else:
                 if 'dist' in k:

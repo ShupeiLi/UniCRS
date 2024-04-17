@@ -1,5 +1,8 @@
 import json
 from tqdm.auto import tqdm
+import os
+
+os.chdir("src/data/inspired")
 
 
 def process(data_file, out_file, movie_set):

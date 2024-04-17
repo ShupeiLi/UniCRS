@@ -27,7 +27,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--seed", type=int, default=42, help="A seed for reproducible training.")
     parser.add_argument("--output_dir", type=str, help="Where to store the final model.", default="conv-save")
-    parser.add_argument("--debug", action='store_true', help="Debug mode.")
+    parser.add_argument("--debug", action='store_true', help="Debug mode.", default=True)
     # data
     parser.add_argument("--dataset", type=str, help="A file containing all data.", default="redial") # NOTE: [redial, inspired]
     parser.add_argument('--num_workers', type=int, default=0)
@@ -42,7 +42,7 @@ def parse_args():
     parser.add_argument("--model", type=str, default="microsoft/DialoGPT-small")
     parser.add_argument("--max_gen_len", type=int, default=50)
     parser.add_argument("--text_encoder", type=str, default="roberta-base")
-    parser.add_argument("--prompt_encoder", type=str, default="pre-save/best")
+    parser.add_argument("--prompt_encoder", type=str, default="prompt-save/best")
     parser.add_argument("--n_prefix_conv", type=int, default=20)
     parser.add_argument("--num_bases", type=int, default=8, help="num_bases in RGCN")
     # optim

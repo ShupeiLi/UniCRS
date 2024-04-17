@@ -1,7 +1,10 @@
 import json
 import os.path
-
 from tqdm import tqdm
+import os
+
+os.chdir("data/redial")
+
 
 with open('entity2id.json', encoding='utf-8') as f:
     entity2id = json.load(f)

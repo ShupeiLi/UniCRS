@@ -2,7 +2,9 @@ import time
 from collections import defaultdict
 import pickle as pkl
 from tqdm import tqdm
+import os
 
+os.chdir("data/dbpedia")
 
 def load_kg(file):
     kg = defaultdict(list)  # {head entity: [(relation, tail entity)]}

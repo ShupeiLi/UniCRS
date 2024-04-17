@@ -1,6 +1,9 @@
 import json
-
 from tqdm import tqdm
+import os
+
+os.chdir("data/inspired")
+
 
 with open('entity2id.json', encoding='utf-8') as f:
     entity2id = json.load(f)

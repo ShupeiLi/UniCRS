@@ -5,4 +5,4 @@ wandb
 loguru
 torch_geometric
 nltk
-rouge
+py-rouge
