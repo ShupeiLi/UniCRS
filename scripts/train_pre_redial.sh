@@ -1,3 +1,11 @@
+#!/bin/bash
+# Data processing
+python data/redial/extract_subkg.py
+python data/redial/remove_entity.py
+
+# Prompt pre-training
+cp -r data/redial src/data/
+python src/data/redial/process.py
 accelerate launch src/train_pre.py \
     --dataset redial \
     --tokenizer microsoft/DialoGPT-small \
@@ -14,4 +22,3 @@ accelerate launch src/train_pre.py \
     --entity_max_length 32 \
     --learning_rate 5e-4 \
     --output_dir prompt-save \
-    --debug

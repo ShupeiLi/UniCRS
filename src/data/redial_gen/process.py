@@ -3,6 +3,9 @@ import re
 
 import html
 from tqdm.auto import tqdm
+import os
+
+os.chdir("src/data/redial")
 
 movie_pattern = re.compile(r'@\d+')
 

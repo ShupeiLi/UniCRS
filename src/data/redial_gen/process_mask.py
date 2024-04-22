@@ -1,8 +1,11 @@
 import json
 import re
-
 import html
 from tqdm.auto import tqdm
+import os
+
+os.chdir("data/redial")
+
 
 movie_pattern = re.compile(r'@\d+')
 

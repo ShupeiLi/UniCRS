@@ -2,7 +2,9 @@ import json
 from collections import defaultdict
 import pickle as pkl
 from tqdm.auto import tqdm
+import os
 
+os.chdir("data/redial")
 
 def get_item_set(file):
     entity = set()
@@ -110,7 +112,7 @@ print(f'# all entity: {len(all_entity)}')
 
 with open('../dbpedia/kg.pkl', 'rb') as f:
     kg = pkl.load(f)
-subkg = extract_subkg(kg, all_entity, 2)
+subkg = extract_subkg(kg, all_entity, 1)  # TODO: param: n-hop
 entity2id, relation2id, subkg = kg2id(subkg)
 
 with open('dbpedia_subkg.json', 'w', encoding='utf-8') as f:
