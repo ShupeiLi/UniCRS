@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument("--output_dir", type=str, default='pre-save', help="Where to store the final model.") # set save path
     parser.add_argument("--debug", action='store_true', help="Debug mode.")
     # data
-    parser.add_argument("--dataset", type=str, help="A file containing all data.", default="redial") # NOTE: [redial, inspired]
+    parser.add_argument("--dataset", type=str, help="A file containing all data.", required=True) # NOTE: [redial, inspired]
     parser.add_argument('--num_workers', type=int, default=0)
     parser.add_argument("--max_length", type=int, help="max input length in dataset.", default=200)
     parser.add_argument("--prompt_max_length", type=int, default=200)
@@ -51,11 +51,11 @@ def parse_args():
                         help="Batch size (per device) for the evaluation dataloader.")
     parser.add_argument("--gradient_accumulation_steps", type=int, default=1,
                         help="Number of updates steps to accumulate before performing a backward/update pass.")
-    parser.add_argument("--learning_rate", type=float, default=5e-4,
+    parser.add_argument("--learning_rate", type=float, required=True,
                         help="Initial learning rate (after the potential warmup period) to use.") # NOTE: 5e-4 for redial, 6e-4 for inspired
     parser.add_argument("--weight_decay", type=float, default=0.01, help="Weight decay to use.")
     parser.add_argument('--max_grad_norm', type=float)
-    parser.add_argument('--num_warmup_steps', type=int, default=1389) # NOTE: 1389 for redial , 168 for inspired
+    parser.add_argument('--num_warmup_steps', type=int, required=True) # NOTE: 1389 for redial , 168 for inspired
     parser.add_argument("--mixed_precision", type=str, default="fp16")
     # wandb
     parser.add_argument("--use_wandb", action="store_true", help="whether to use wandb", default=False)

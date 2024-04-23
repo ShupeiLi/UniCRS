@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument("--output_dir", type=str, default='rec-save', help="Where to store the final model.")
     parser.add_argument("--debug", action='store_true', help="Debug mode.")
     # data
-    parser.add_argument("--dataset", type=str, help="A file containing all data.", default="redial_gen") # NOTE: [redial_gen, inspired_gen]
+    parser.add_argument("--dataset", type=str, help="A file containing all data.", required=True) # NOTE: [redial_gen, inspired_gen]
     parser.add_argument("--shot", type=float, default=1)
     parser.add_argument("--use_resp", action="store_true")
     parser.add_argument("--context_max_length", type=int, help="max input length in dataset.", default=200)
@@ -59,7 +59,7 @@ def parse_args():
                         help="Initial learning rate (after the potential warmup period) to use.")
     parser.add_argument("--weight_decay", type=float, default=0.01, help="Weight decay to use.")
     parser.add_argument('--max_grad_norm', type=float)
-    parser.add_argument('--num_warmup_steps', type=int, default=530) # NOTE: 33 for inspired_gen
+    parser.add_argument('--num_warmup_steps', type=int, required=True) # NOTE: 33 for inspired_gen
     parser.add_argument("--mixed_precision", type=str, default="fp16")
     # wandb
     parser.add_argument("--use_wandb", action="store_true", help="whether to use wandb", default=False)
