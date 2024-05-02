@@ -2,7 +2,7 @@
 # Conversation Task Training and Inference
 # infer
 accelerate launch src/infer_conv.py \
-    --dataset redial \
+    --dataset inspired \
     --split train \
     --tokenizer microsoft/DialoGPT-small \
     --model microsoft/DialoGPT-small \
@@ -16,8 +16,11 @@ accelerate launch src/infer_conv.py \
     --prompt_max_length 200 \
     --entity_max_length 32
 
+mv "${log_path}/$(ls "./log" | grep ".*\.log")" "${log_path}/conv-infer-train.log"
+mv "${log_path}/conv-infer-train.log" "${log_back_path}"
+
 accelerate launch src/infer_conv.py \
-    --dataset redial \
+    --dataset inspired \
     --split valid \
     --tokenizer microsoft/DialoGPT-small \
     --model microsoft/DialoGPT-small \
@@ -31,8 +34,11 @@ accelerate launch src/infer_conv.py \
     --prompt_max_length 200 \
     --entity_max_length 32
 
+mv "${log_path}/$(ls "./log" | grep ".*\.log")" "${log_path}/conv-infer-valid.log"
+mv "${log_path}/conv-infer-valid.log" "${log_back_path}"
+
 accelerate launch src/infer_conv.py \
-    --dataset redial \
+    --dataset inspired \
     --split test \
     --tokenizer microsoft/DialoGPT-small \
     --model microsoft/DialoGPT-small \
@@ -45,3 +51,6 @@ accelerate launch src/infer_conv.py \
     --resp_max_length 183 \
     --prompt_max_length 200 \
     --entity_max_length 32
+
+mv "${log_path}/$(ls "./log" | grep ".*\.log")" "${log_path}/conv-infer-test.log"
+mv "${log_path}/conv-infer-test.log" "${log_back_path}"

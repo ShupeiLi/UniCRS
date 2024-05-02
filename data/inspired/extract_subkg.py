@@ -78,24 +78,32 @@ def kg2id(kg):
     return entity2id, relation2id, kg_idx
 
 
-all_item = set()
-file_list = [
-    'test.jsonl',
-    'dev.jsonl',
-    'train.jsonl',
-]
-for file in file_list:
-    all_item |= get_item_set(file)
-print(f'# all item: {len(all_item)}')
+if __name__ == '__main__':
+    # parse args
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hop', type=int, required=True)
+    parser.add_argument('--drop', type=float, default=1.0)
+    args, _ = parser.parse_known_args()
+    print(f"Extract {args.hop}-hop subkg. Drop rate: {args.drop}.")  # TODO: Add one-hop drop
 
-with open('../dbpedia/kg.pkl', 'rb') as f:
-    kg = pkl.load(f)
-subkg = extract_subkg(kg, all_item, 3) # TODO: param: n-hop
-entity2id, relation2id, subkg = kg2id(subkg)
+    all_item = set()
+    file_list = [
+        'test.jsonl',
+        'dev.jsonl',
+        'train.jsonl',
+    ]
+    for file in file_list:
+        all_item |= get_item_set(file)
+    print(f'# all item: {len(all_item)}')
 
-with open('dbpedia_subkg.json', 'w', encoding='utf-8') as f:
-    json.dump(subkg, f, ensure_ascii=False)
-with open('entity2id.json', 'w', encoding='utf-8') as f:
-    json.dump(entity2id, f, ensure_ascii=False)
-with open('relation2id.json', 'w', encoding='utf-8') as f:
-    json.dump(relation2id, f, ensure_ascii=False)
+    with open('../dbpedia/kg.pkl', 'rb') as f:
+        kg = pkl.load(f)
+    subkg = extract_subkg(kg, all_item, args.hop)  # NOTE: n-hop parameter
+    entity2id, relation2id, subkg = kg2id(subkg)
+
+    with open('dbpedia_subkg.json', 'w', encoding='utf-8') as f:
+        json.dump(subkg, f, ensure_ascii=False)
+    with open('entity2id.json', 'w', encoding='utf-8') as f:
+        json.dump(entity2id, f, ensure_ascii=False)
+    with open('relation2id.json', 'w', encoding='utf-8') as f:
+        json.dump(relation2id, f, ensure_ascii=False)

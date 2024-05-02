@@ -3,6 +3,7 @@ from collections import defaultdict
 import pickle as pkl
 from tqdm.auto import tqdm
 import os
+import argparse
 
 os.chdir("data/redial")
 
@@ -100,27 +101,35 @@ def kg2id(kg):
     return entity2id, relation2id, kg_idx
 
 
-all_entity = set()
-file_list = [
-    'test_data_dbpedia_raw.jsonl',
-    'valid_data_dbpedia_raw.jsonl',
-    'train_data_dbpedia_raw.jsonl',
-]
-for file in file_list:
-    all_entity |= get_item_set(file)
-print(f'# all entity: {len(all_entity)}')
+if __name__ == '__main__':
+    # parse args
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hop', type=int, required=True)
+    parser.add_argument('--drop', type=float, default=1.0)
+    args, _ = parser.parse_known_args()
+    print(f"Extract {args.hop}-hop subkg. Drop rate: {args.drop}.")  # TODO: Add one-hop drop
 
-with open('../dbpedia/kg.pkl', 'rb') as f:
-    kg = pkl.load(f)
-subkg = extract_subkg(kg, all_entity, 3)  # TODO: param: n-hop
-entity2id, relation2id, subkg = kg2id(subkg)
+    all_entity = set()
+    file_list = [
+        'test_data_dbpedia_raw.jsonl',
+        'valid_data_dbpedia_raw.jsonl',
+        'train_data_dbpedia_raw.jsonl',
+    ]
+    for file in file_list:
+        all_entity |= get_item_set(file)
+    print(f'# all entity: {len(all_entity)}')
 
-with open('dbpedia_subkg.json', 'w', encoding='utf-8') as f:
-    json.dump(subkg, f, ensure_ascii=False)
-with open('entity2id.json', 'w', encoding='utf-8') as f:
-    json.dump(entity2id, f, ensure_ascii=False)
-with open('relation2id.json', 'w', encoding='utf-8') as f:
-    json.dump(relation2id, f, ensure_ascii=False)
+    with open('../dbpedia/kg.pkl', 'rb') as f:
+        kg = pkl.load(f)
+    subkg = extract_subkg(kg, all_entity, args.hop)  # NOTE: n-hop parameter
+    entity2id, relation2id, subkg = kg2id(subkg)
+
+    with open('dbpedia_subkg.json', 'w', encoding='utf-8') as f:
+        json.dump(subkg, f, ensure_ascii=False)
+    with open('entity2id.json', 'w', encoding='utf-8') as f:
+        json.dump(entity2id, f, ensure_ascii=False)
+    with open('relation2id.json', 'w', encoding='utf-8') as f:
+        json.dump(relation2id, f, ensure_ascii=False)
 
 # relation > 500: edge: 172644, #relation: 45, #entity: 50593
 # relation > 1000: edge: 139854, #relation: 22, #entity: 44708

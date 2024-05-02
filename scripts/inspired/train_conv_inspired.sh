@@ -22,4 +22,4 @@ accelerate launch src/train_conv.py \
     --prompt_max_length 200 \
     --entity_max_length 32 \
     --learning_rate 1e-4 \
-    --output_dir conv-save \
+    --output_dir conv-save
