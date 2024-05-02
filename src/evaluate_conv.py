@@ -44,7 +44,9 @@ class ConvEvaluator:
         self.compute_bleu(decoded_preds, decoded_labels)
         self.compute_rouge(decoded_preds, decoded_labels)
         self.compute_intra_dist(decoded_preds)
-        self.sent_cnt += len([pred for pred in decoded_preds if len(pred) > 0]) # number of samples: rouge, intra-distinct
+        self.sent_cnt += len(
+            [pred for pred in decoded_preds if len(pred) > 0]
+        )  # number of samples: rouge, intra-distinct
 
     def collect_ngram(self, strs):
         for str in strs:
@@ -52,7 +54,7 @@ class ConvEvaluator:
             for k in range(1, 5):
                 dist_k = f'dist@{k}'
                 for token in ngrams(str, k):
-                    self.metric[dist_k].add(token)
+                    self.metric[dist_k].append(token)
 
     def compute_intra_dist(self, preds):
         for k in range(1, 5):
@@ -63,23 +65,18 @@ class ConvEvaluator:
         intra = 0.0
         for pred in preds:
             pred = pred.split()
-            if len(pred)  == 0:
+            if len(pred) == 0:
                 continue
             counts = Counter(ngrams(pred, k))
             intra += max(len(counts), 1e-12) / max(sum(counts.values()), 1e-5)
-        return intra 
+        return intra
 
     def compute_bleu(self, preds, labels):
         for pred, label in zip(preds, labels):
             pred, label = pred.split(), [label.split()]
             for k in range(1, 5):
-                weights = [1 / k for _ in range(k)] # Correct weights
-                self.metric[f'bleu@{k}'] += sentence_bleu(
-                    label,
-                    pred,
-                    smoothing_function=nltkbleu.SmoothingFunction(epsilon=1e-12).method1,
-                    weights=weights,
-                )
+                weights = [1 / k for _ in range(k)]  # Correct weights
+                self.metric[f'bleu@{k}'] += sentence_bleu(label, pred, weights=weights)
 
     def compute_item_ratio(self, strs):
         for str in strs:
@@ -99,8 +96,8 @@ class ConvEvaluator:
     def _rouge(self, guess, answers, measure='r'):
         """Compute ROUGE score."""
         evaluator = rouge.Rouge(
-                    metrics=['rouge-n', 'rouge-l'], max_n=2
-                )
+            metrics=['rouge-n', 'rouge-l'], max_n=2
+        )
         score = evaluator.get_scores(guess, answers)
         return [score['rouge-1'][measure], score['rouge-2'][measure], score['rouge-l'][measure]]
 
@@ -111,9 +108,9 @@ class ConvEvaluator:
                 report[k] = 0
             elif ('rouge' in k) or ('intra-dist' in k):
                 report[k] = v / self.sent_cnt
+            elif 'dist' in k:
+                report[k] = len(set(v)) / len(v)
             else:
-                if 'dist' in k:
-                    v = len(v)
                 report[k] = v / self.sent_cnt
         report['sent_cnt'] = self.sent_cnt
         return report
@@ -131,10 +128,10 @@ class ConvEvaluator:
             'intra-dist@2': 0,
             'intra-dist@3': 0,
             'intra-dist@4': 0,
-            'dist@1': set(),
-            'dist@2': set(),
-            'dist@3': set(),
-            'dist@4': set(),
+            'dist@1': list(),
+            'dist@2': list(),
+            'dist@3': list(),
+            'dist@4': list(),
             'item_ratio': 0,
         }
         self.sent_cnt = 0
