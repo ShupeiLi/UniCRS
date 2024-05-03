@@ -20,6 +20,9 @@ accelerate launch src/infer_conv.py \
     --prompt_max_length 200 \
     --entity_max_length 32
   code=$?
+  if [ $code -ne 0 ]; then
+    rm ${log_path}/*.log
+  fi
 done
 
 mv "${log_path}/$(ls "./log" | grep ".*\.log")" "${log_path}/conv-infer-train.log"
@@ -43,6 +46,9 @@ until [ $code -eq 0 ]; do
       --prompt_max_length 200 \
       --entity_max_length 32
   code=$?
+  if [ $code -ne 0 ]; then
+    rm ${log_path}/*.log
+  fi
 done
 
 mv "${log_path}/$(ls "./log" | grep ".*\.log")" "${log_path}/conv-infer-valid.log"
@@ -66,6 +72,9 @@ until [ $code -eq 0 ]; do
       --prompt_max_length 200 \
       --entity_max_length 32
   code=$?
+  if [ $code -ne 0 ]; then
+    rm ${log_path}/*.log
+  fi
 done
 
 mv "${log_path}/$(ls "./log" | grep ".*\.log")" "${log_path}/conv-infer-test.log"

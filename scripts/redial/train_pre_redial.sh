@@ -27,4 +27,7 @@ until [ $code -eq 0 ]; do
       --learning_rate 5e-4 \
       --output_dir prompt-save
   code=$?
+  if [ $code -ne 0 ]; then
+    rm ${log_path}/*.log
+  fi
 done

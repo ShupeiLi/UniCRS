@@ -28,4 +28,7 @@ accelerate launch src/train_conv.py \
     --learning_rate 1e-4 \
     --output_dir conv-save
   code=$?
+  if [ $code -ne 0 ]; then
+    rm ${log_path}/*.log
+  fi
 done

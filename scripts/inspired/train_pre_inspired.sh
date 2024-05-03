@@ -27,4 +27,7 @@ accelerate launch src/train_pre.py \
     --learning_rate 6e-4 \
     --output_dir prompt-save
   code=$?
+  if [ $code -ne 0 ]; then
+    rm ${log_path}/*.log
+  fi
 done
