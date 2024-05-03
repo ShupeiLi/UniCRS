@@ -6,6 +6,10 @@ python data/inspired/remove_entity.py
 # Prompt pre-training
 cp -r data/inspired src/data/
 python src/data/inspired/process.py
+
+code=1
+
+until [ $code -eq 0 ]; do
 accelerate launch src/train_pre.py \
     --dataset inspired \
     --tokenizer microsoft/DialoGPT-small \
@@ -22,3 +26,5 @@ accelerate launch src/train_pre.py \
     --entity_max_length 32 \
     --learning_rate 6e-4 \
     --output_dir prompt-save
+  code=$?
+done
