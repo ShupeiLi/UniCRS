@@ -1,6 +1,6 @@
 #!/bin/bash
 # Data processing
-python data/inspired/extract_subkg.py --hop "${n_hop}" --drop "${drop_rate}"
+python data/inspired/extract_subkg.py --hop "${nhop}" --drop "${drop_rate}"
 python data/inspired/remove_entity.py
 
 # Prompt pre-training
@@ -10,7 +10,7 @@ python src/data/inspired/process.py
 code=1
 
 until [ $code -eq 0 ]; do
-accelerate launch src/train_pre.py \
+  accelerate launch src/train_pre.py \
     --dataset inspired \
     --tokenizer microsoft/DialoGPT-small \
     --model microsoft/DialoGPT-small \

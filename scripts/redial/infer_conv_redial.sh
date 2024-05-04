@@ -5,7 +5,7 @@
 code=1
 
 until [ $code -eq 0 ]; do
-accelerate launch src/infer_conv.py \
+  accelerate launch src/infer_conv.py \
     --dataset redial \
     --split train \
     --tokenizer microsoft/DialoGPT-small \
