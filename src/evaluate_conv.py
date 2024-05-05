@@ -59,7 +59,7 @@ class ConvEvaluator:
     def compute_intra_dist(self, preds):
         for k in range(1, 5):
             dist_k = f'intra-dist@{k}'
-            self.metric[dist_k] = self._intra_dist(preds, k)
+            self.metric[dist_k] += self._intra_dist(preds, k)
 
     def _intra_dist(self, preds, k):
         intra = 0.0
