@@ -7,7 +7,7 @@ python src/data/redial/process_mask.py
 code=1
 
 until [ $code -eq 0 ]; do
-accelerate launch src/train_conv.py \
+  accelerate launch src/train_conv.py \
     --dataset redial \
     --tokenizer microsoft/DialoGPT-small \
     --model microsoft/DialoGPT-small \

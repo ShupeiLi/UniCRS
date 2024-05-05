@@ -10,6 +10,7 @@ prompt-save
 conv-save
 log-backup
 log
+model
 *.jsonl
 *.json
 rec-save

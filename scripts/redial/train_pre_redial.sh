@@ -1,6 +1,6 @@
 #!/bin/bash
 # Data processing
-python data/redial/extract_subkg.py --hop "${n_hop}" --drop "${drop_rate}"
+python data/redial/extract_subkg.py --hop "${nhop}" --drop "${drop_rate}"
 python data/redial/remove_entity.py
 
 # Prompt pre-training
