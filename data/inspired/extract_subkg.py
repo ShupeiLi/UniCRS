@@ -1,8 +1,10 @@
 import json
+import random
 from collections import defaultdict
 import pickle as pkl
 from tqdm.auto import tqdm
 import os
+import argparse
 
 os.chdir("data/inspired")
 
@@ -78,13 +80,32 @@ def kg2id(kg):
     return entity2id, relation2id, kg_idx
 
 
+def random_drop(sub_kg: defaultdict[list], drop_rate: float):
+    edges = list()
+    for item in sub_kg.items():
+        head = item[0]
+        for body in item[1]:
+            edge = list()
+            edge.append(head)
+            edge.append(body[0])
+            edge.append(body[1])
+            edges.append(edge)
+
+    random.seed(42)
+    sub_kg = random.choices(edges, k=int(len(edges) * drop_rate))
+    sub_kg_dict = defaultdict(list)
+    for edge in sub_kg:
+        sub_kg_dict[edge[0]].append(edge[1:])
+    return sub_kg_dict
+
+
 if __name__ == '__main__':
     # parse args
     parser = argparse.ArgumentParser()
     parser.add_argument('--hop', type=int, required=True)
     parser.add_argument('--drop', type=float, default=1.0)
     args, _ = parser.parse_known_args()
-    print(f"Extract {args.hop}-hop subkg. Drop rate: {args.drop}.")  # TODO: Add one-hop drop
+    print(f"Extract {args.hop}-hop subkg. Drop rate: {args.drop} ({type(args.drop)}).")
 
     all_item = set()
     file_list = [
@@ -99,6 +120,11 @@ if __name__ == '__main__':
     with open('../dbpedia/kg.pkl', 'rb') as f:
         kg = pkl.load(f)
     subkg = extract_subkg(kg, all_item, args.hop)  # NOTE: n-hop parameter
+
+    # One-hop random drop
+    if args.drop < 1.0:
+        subkg = random_drop(subkg, args.drop)
+
     entity2id, relation2id, subkg = kg2id(subkg)
 
     with open('dbpedia_subkg.json', 'w', encoding='utf-8') as f:

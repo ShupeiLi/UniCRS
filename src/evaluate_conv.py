@@ -1,13 +1,12 @@
-import re
-
 import json
+import re
+from collections import Counter
+
+import rouge
 from nltk import ngrams
 from nltk.translate.bleu_score import sentence_bleu
 
-import rouge
 from utils import normalize_answer
-from nltk.translate import bleu_score as nltkbleu
-from collections import Counter
 
 # year_pattern = re.compile(r'\(\d{4}\)')
 slot_pattern = re.compile(r'<movie>')
