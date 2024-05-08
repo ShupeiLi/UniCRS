@@ -103,7 +103,7 @@ def kg2id(kg):
     return entity2id, relation2id, kg_idx
 
 
-def random_drop(sub_kg: defaultdict[list], drop_rate: float):
+def random_drop(sub_kg, drop_rate):
     edges = list()
     for item in sub_kg.items():
         head = item[0]
