@@ -1,8 +1,8 @@
 #!/bin/bash
 # Change nhop, drop_rate, dataset
-nhop=2
-drop_rate=1.0
-dataset="redial"
+#nhop=1
+#drop_rate=1.0
+#dataset="redial"
 
 log_path="$(pwd)/log"
 log_back_path="$(pwd)/log-backup"

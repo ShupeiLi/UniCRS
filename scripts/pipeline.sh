@@ -13,11 +13,3 @@ drop_rate=0.7
 nhop=1
 drop_rate=0.9
 . scripts/quick-start.sh
-
-nhop=1
-drop_rate=1.0
-. scripts/quick-start.sh
-
-nhop=3
-drop_rate=1.0
-. scripts/quick-start.sh
