@@ -1,8 +1,8 @@
 #!/bin/bash
 # Change nhop, drop_rate, dataset
-#nhop=1
-#drop_rate=1.0
-#dataset="redial"
+nhop=1
+drop_rate=1.0
+dataset="redial"
 
 log_path="$(pwd)/log"
 log_back_path="$(pwd)/log-backup"
@@ -31,15 +31,15 @@ mv "${log_path}/rec-train.log" "${log_back_path}"
 mv "${log_path}/$(ls "./log" | grep ".*\.jsonl")" "${log_back_path}"
 
 # backup
-mkdir -p "${save_path}/${nhop}-hop/"
+mkdir -p "${save_path}/${drop_rate}-hop/"
 mv "save/${dataset}" log-backup
-cp -R log-backup "${save_path}/${nhop}-hop/"
+cp -R log-backup "${save_path}/${drop_rate}-hop/"
 mkdir -p model
 mv prompt-save model
 mv conv-save model
 mv rec-save model
-zip -r "${dataset}-dbpedia-${nhop}hop-model.zip" model
-mv "${dataset}-dbpedia-${nhop}hop-model.zip" "${save_path}/${nhop}-hop/"
+zip -r "${dataset}-dbpedia-${drop_rate}hop-model.zip" model
+mv "${dataset}-dbpedia-${drop_rate}hop-model.zip" "${save_path}/${drop_rate}-hop/"
 
 # clean up
 sh scripts/clean.sh
